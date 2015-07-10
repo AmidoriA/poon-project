@@ -18,6 +18,13 @@
 <!-- Latest compiled and minified CSS & JS -->
 <link rel="stylesheet" media="screen" href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
+<style type="text/css">
+  [contentEditable="true"] { 
+    background-color: #F2F29A;
+    outline: black dotted 1px;
+  }
+</style>
+
 <div class="well">
   <div class="row">
     <div class="col-md-4">
@@ -41,12 +48,13 @@
   <tbody>
     <?php foreach ($customers as $key => $customer): ?>
       <tr data-id="<?php echo $customer['id']; ?>" class="customer-row">
-        <td data-field="name"><?php echo $customer['fullname'] ?></td>
-        <td data-field="address"><?php echo $customer['address'] ?></td>
-        <td data-field="phone"><?php echo $customer['phone'] ?></td>
-        <td>
+        <td data-field="name"><span><?php echo $customer['fullname'] ?></span></td>
+        <td data-field="address"><span><?php echo $customer['address'] ?></span></td>
+        <td data-field="phone"><span><?php echo $customer['phone'] ?></span></td>
+        <td data-field="action">
           <a href="#" data-action="delete"><img src="/images/cancel.png"></a>
           <a href="#" data-action="edit"><img src="/images/edit.png"></a>
+          <a href="#" data-action="update" style="display:none"><img src="/images/edit-green.png"></a>
         </td>
       </tr>
     <?php endforeach ?>
@@ -116,7 +124,7 @@ var Control = {
             '<td data-field="name">'+fullname+'</td>' +
             '<td data-field="address">'+address+'</td>' +
             '<td data-field="phone">'+phone+'</td>' +
-            '<td>' +
+            '<td data-field="action">' +
               '<a href="#" data-action="delete"><img src="/images/cancel.png"></a>' +
               '<a href="#"><img src="/images/edit.png"></a>' +
             '</td>' +
@@ -167,7 +175,9 @@ var Control = {
 
   editRow: function(dom) {
     $(dom).hide();
-    $(dom).closest('tr').find('td').attr('contentEditable', 'true');
+    $(dom).closest('td').find('[data-action=update]').show();
+    $(dom).closest('td').find('[data-action=delete]').hide();
+    $(dom).closest('tr').find('td').not('[data-field=action]').attr('contentEditable', 'true');
   },
 
   updateRow: function(dom) {
@@ -181,42 +191,22 @@ var Control = {
 
     console.log(fullname);
 
-    // var url = that.serviceUrl + '/?action=update&fullname='+fullname+'&address='+address+'&phone='+phone;
-    // $.ajax({
-    //   url: url
-    // }).done(function(data){
-    //   data = JSON.parse(data);
-    //   if (data.status=='success') {
-    //     // $(row).remove();
-    //     var last_id = data.data.last_id;
+    var url = that.serviceUrl + '/?action=update&fullname='+fullname+'&address='+address+'&phone='+phone+'&id='+id;
+    $.ajax({
+      url: url
+    }).done(function(data){
+      data = JSON.parse(data);
+      if (data.status=='success') {
+        alert(data.description);
+      } else {
+        alert(data.description);
+      }
+    });
 
-    //     var new_row = $(
-    //       '<tr data-id="'+last_id+'" class="customer-row">' +
-    //         '<td data-field="name">'+fullname+'</td>' +
-    //         '<td data-field="address">'+address+'</td>' +
-    //         '<td data-field="phone">'+phone+'</td>' +
-    //         '<td>' +
-    //           '<a href="#" data-action="delete"><img src="/images/cancel.png"></a>' +
-    //           '<a href="#"><img src="/images/edit.png"></a>' +
-    //         '</td>' +
-    //       '</tr>'
-    //     );
-
-    //     new_row.insertBefore(row);
-    //     new_row.find('[data-action=delete]').click(function(){
-    //       that.deleteRow(this);
-    //     });
-
-    //     new_row.find('[data-action=create]').click(function(){
-    //       that.createRow(this);
-    //     });
-
-    //     $(row).find('input').val('');
-
-    //   } else {
-    //     alert(data.description);
-    //   }
-    // });
+    $(dom).hide();
+    $(dom).closest('tr').find('td').not('[data-field=action]').attr('contentEditable', 'false');
+    $(dom).closest('td').find('[data-action=edit]').show();
+    $(dom).closest('td').find('[data-action=delete]').show();
   }
 };
 
