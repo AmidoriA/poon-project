@@ -46,7 +46,7 @@
         <td data-field="phone"><?php echo $customer['phone'] ?></td>
         <td>
           <a href="#" data-action="delete"><img src="/images/cancel.png"></a>
-          <a href="#"><img src="/images/edit.png"></a>
+          <a href="#" data-action="edit"><img src="/images/edit.png"></a>
         </td>
       </tr>
     <?php endforeach ?>
@@ -83,6 +83,14 @@ var Control = {
 
     $('[data-action=create]').click(function(){
       that.createRow();
+    });
+
+    $('[data-action=update]').click(function(){
+      that.updateRow(this);
+    });
+
+    $('[data-action=edit]').click(function(){
+      that.editRow(this);
     });
   },
 
@@ -124,6 +132,10 @@ var Control = {
           that.createRow(this);
         });
 
+        new_row.find('[data-action=update]').click(function(){
+          that.updateRow(this);
+        });
+
         $(row).find('input').val('');
 
       } else {
@@ -151,6 +163,60 @@ var Control = {
         alert(data.description);
       }
     });
+  },
+
+  editRow: function(dom) {
+    $(dom).hide();
+    $(dom).closest('tr').find('td').attr('contentEditable', 'true');
+  },
+
+  updateRow: function(dom) {
+    var that = this;
+
+    var row = $(dom).closest('tr');
+    var fullname = $(row).find('[data-field=name]').html();
+    var address = $(row).find('[data-field=address]').html();
+    var phone = $(row).find('[data-field=phone]').html();
+    var id = $(row).attr('data-id');
+
+    console.log(fullname);
+
+    // var url = that.serviceUrl + '/?action=update&fullname='+fullname+'&address='+address+'&phone='+phone;
+    // $.ajax({
+    //   url: url
+    // }).done(function(data){
+    //   data = JSON.parse(data);
+    //   if (data.status=='success') {
+    //     // $(row).remove();
+    //     var last_id = data.data.last_id;
+
+    //     var new_row = $(
+    //       '<tr data-id="'+last_id+'" class="customer-row">' +
+    //         '<td data-field="name">'+fullname+'</td>' +
+    //         '<td data-field="address">'+address+'</td>' +
+    //         '<td data-field="phone">'+phone+'</td>' +
+    //         '<td>' +
+    //           '<a href="#" data-action="delete"><img src="/images/cancel.png"></a>' +
+    //           '<a href="#"><img src="/images/edit.png"></a>' +
+    //         '</td>' +
+    //       '</tr>'
+    //     );
+
+    //     new_row.insertBefore(row);
+    //     new_row.find('[data-action=delete]').click(function(){
+    //       that.deleteRow(this);
+    //     });
+
+    //     new_row.find('[data-action=create]').click(function(){
+    //       that.createRow(this);
+    //     });
+
+    //     $(row).find('input').val('');
+
+    //   } else {
+    //     alert(data.description);
+    //   }
+    // });
   }
 };
 

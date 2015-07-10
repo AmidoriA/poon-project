@@ -35,6 +35,22 @@ function create() {
   success('create successful', compact('last_id'));
 }
 
+function update() {
+  $fullname = $_REQUEST['fullname'];
+  $address = $_REQUEST['address'];
+  $phone = $_REQUEST['phone'];
+  $id = $_REQUEST['id'];
+
+  if (empty($_REQUEST['fullname']) || empty($_REQUEST['address']) || empty($_REQUEST['phone']) || empty($_REQUEST['id'])) {
+    fail('All fields required');
+  }
+
+  $query = "UPDATE customers SET fullname='{$fullname}', address='{$address}', phone='{$phone}' WHERE id={$id}";
+
+  mysql_query($query) or fail(mysql_error());
+  success('update successful');
+}
+
 function delete() {
   $id = $_REQUEST['id'];
   $query = "DELETE FROM customers WHERE id={$id}";
