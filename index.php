@@ -125,8 +125,9 @@ var Control = {
             '<td data-field="address">'+address+'</td>' +
             '<td data-field="phone">'+phone+'</td>' +
             '<td data-field="action">' +
-              '<a href="#" data-action="delete"><img src="/images/cancel.png"></a>' +
-              '<a href="#"><img src="/images/edit.png"></a>' +
+              '<a href="#" data-action="delete"><img src="/images/cancel.png"></a> ' +
+              '<a href="#" data-action="edit"><img src="/images/edit.png"></a> ' +
+              '<a href="#" data-action="update" style="display:none"><img src="/images/edit-green.png"></a> ' +
             '</td>' +
           '</tr>'
         );
@@ -143,6 +144,11 @@ var Control = {
         new_row.find('[data-action=update]').click(function(){
           that.updateRow(this);
         });
+
+        new_row.find('[data-action=edit]').click(function(){
+          that.editRow(this);
+        });
+
 
         $(row).find('input').val('');
 
