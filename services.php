@@ -23,12 +23,13 @@ function create() {
   $fullname = $_REQUEST['fullname'];
   $address = $_REQUEST['address'];
   $phone = $_REQUEST['phone'];
+  $email = $_REQUEST['email'];
 
-  if (empty($_REQUEST['fullname']) || empty($_REQUEST['address']) || empty($_REQUEST['phone'])) {
+  if (empty($_REQUEST['fullname']) || empty($_REQUEST['address']) || empty($_REQUEST['phone']) || empty($_REQUEST['email'])) {
     fail('All field required');
   }
 
-  $query = "INSERT INTO customers SET fullname='{$fullname}', address='{$address}', phone='{$phone}'";
+  $query = "INSERT INTO customers SET fullname='{$fullname}', address='{$address}', phone='{$phone}', email='{$email}'";
 
   mysql_query($query) or fail(mysql_error());
   $last_id = mysql_insert_id();
@@ -39,13 +40,14 @@ function update() {
   $fullname = $_REQUEST['fullname'];
   $address = $_REQUEST['address'];
   $phone = $_REQUEST['phone'];
+  $email = $_REQUEST['email'];
   $id = $_REQUEST['id'];
 
-  if (empty($_REQUEST['fullname']) || empty($_REQUEST['address']) || empty($_REQUEST['phone']) || empty($_REQUEST['id'])) {
+  if (empty($_REQUEST['fullname']) || empty($_REQUEST['address']) || empty($_REQUEST['phone']) || empty($_REQUEST['email']) || empty($_REQUEST['id'])) {
     fail('All fields required');
   }
 
-  $query = "UPDATE customers SET fullname='{$fullname}', address='{$address}', phone='{$phone}' WHERE id={$id}";
+  $query = "UPDATE customers SET fullname='{$fullname}', address='{$address}', phone='{$phone}', email='{$email}' WHERE id={$id}";
 
   mysql_query($query) or fail(mysql_error());
   success('update successful');

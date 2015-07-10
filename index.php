@@ -42,15 +42,17 @@
       <th>Name</th>
       <th>Address</th>
       <th>Phone</th>
+      <th>Email</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
     <?php foreach ($customers as $key => $customer): ?>
       <tr data-id="<?php echo $customer['id']; ?>" class="customer-row">
-        <td data-field="name"><span><?php echo $customer['fullname'] ?></span></td>
-        <td data-field="address"><span><?php echo $customer['address'] ?></span></td>
-        <td data-field="phone"><span><?php echo $customer['phone'] ?></span></td>
+        <td data-field="name"><?php echo $customer['fullname'] ?></td>
+        <td data-field="address"><?php echo $customer['address'] ?></td>
+        <td data-field="phone"><?php echo $customer['phone'] ?></td>
+        <td data-field="email"><?php echo $customer['email'] ?></td>
         <td data-field="action">
           <a href="#" data-action="delete"><img src="/images/cancel.png"></a>
           <a href="#" data-action="edit"><img src="/images/edit.png"></a>
@@ -67,6 +69,9 @@
       </td>
       <td>
         <input type="text" class="form-control" id="phone" placeholder="Phone">
+      </td>
+      <td>
+        <input type="text" class="form-control" id="email" placeholder="Email">
       </td>
       <td><a href="#" data-action="create"><img src="/images/plus.png"></a></td>
     </tr>
@@ -109,8 +114,9 @@ var Control = {
     var fullname = $(row).find('#fullname').val();
     var address = $(row).find('#address').val();
     var phone = $(row).find('#phone').val();
+    var email = $(row).find('#email').val();
 
-    var url = that.serviceUrl + '/?action=create&fullname='+fullname+'&address='+address+'&phone='+phone;
+    var url = that.serviceUrl + '/?action=create&fullname='+fullname+'&address='+address+'&phone='+phone+'&email='+email;
     $.ajax({
       url: url
     }).done(function(data){
@@ -124,6 +130,7 @@ var Control = {
             '<td data-field="name">'+fullname+'</td>' +
             '<td data-field="address">'+address+'</td>' +
             '<td data-field="phone">'+phone+'</td>' +
+            '<td data-field="email">'+email+'</td>' +
             '<td data-field="action">' +
               '<a href="#" data-action="delete"><img src="/images/cancel.png"></a> ' +
               '<a href="#" data-action="edit"><img src="/images/edit.png"></a> ' +
@@ -193,17 +200,17 @@ var Control = {
     var fullname = $(row).find('[data-field=name]').html();
     var address = $(row).find('[data-field=address]').html();
     var phone = $(row).find('[data-field=phone]').html();
+    var email = $(row).find('[data-field=email]').html();
     var id = $(row).attr('data-id');
 
     console.log(fullname);
 
-    var url = that.serviceUrl + '/?action=update&fullname='+fullname+'&address='+address+'&phone='+phone+'&id='+id;
+    var url = that.serviceUrl + '/?action=update&fullname='+fullname+'&address='+address+'&phone='+phone+'&id='+id+'&email='+email;
     $.ajax({
       url: url
     }).done(function(data){
       data = JSON.parse(data);
       if (data.status=='success') {
-        alert(data.description);
       } else {
         alert(data.description);
       }
